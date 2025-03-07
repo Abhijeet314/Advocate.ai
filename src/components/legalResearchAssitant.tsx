@@ -11,8 +11,9 @@ import {
   FaBalanceScale, 
   FaExclamationTriangle 
 } from 'react-icons/fa';
+import { Navbar } from '@/sections/navbar/navbar';
 
-const API_URL = 'http://localhost:5000';
+const API_URL = 'https://legalresearchassitance.onrender.com';
 
 // Animation variants
 const fadeIn = {
@@ -103,9 +104,11 @@ export default function LegalResearchAssitant() {
   };
   
   return (
-    <div className="min-h-screen bg-gray-50">
+    <>
+    
+    <Navbar/>
+    <div className="min-h-screen">
       <Head>
-        <title>Legal Research Assistant</title>
         <meta name="description" content="AI-powered legal insights for lawyers" />
         <link rel="icon" href="/favicon.ico" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -122,7 +125,7 @@ export default function LegalResearchAssitant() {
             <FaGavel className="inline-block mr-2 mb-1" />
             Legal Research Assistant
           </h1>
-          <p className="text-xl text-gray-600 mt-2">
+          <p className="text-xl text-white mt-2">
             AI-powered legal insights to help lawyers build stronger cases
           </p>
         </motion.div>
@@ -134,7 +137,7 @@ export default function LegalResearchAssitant() {
               <FaInfoCircle className="h-5 w-5 text-secondary-600" />
             </div>
             <div className="ml-3">
-              <p className="text-sm text-gray-700">
+              <p className="text-sm text-black">
                 <strong>Disclaimer:</strong> This tool uses AI to provide legal insights based on available knowledge of Indian law. 
                 The analysis should be used as a starting point for your legal research and not as a substitute for professional legal advice. 
                 Always verify information with primary legal sources and consult with qualified legal professionals.
@@ -187,7 +190,7 @@ export default function LegalResearchAssitant() {
               </div>
               
               <div>
-                <label htmlFor="additionalDetails" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="additionalDetails" className="block text-sm font-medium text-black mb-1">
                   Additional Case Details
                 </label>
                 <textarea
@@ -204,7 +207,7 @@ export default function LegalResearchAssitant() {
               <button
                 type="button"
                 onClick={loadExample}
-                className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                className="inline-flex items-center px-4 py-2 border border-black text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
               >
                 <FaInfoCircle className="mr-2" /> Load Example
               </button>
@@ -212,7 +215,7 @@ export default function LegalResearchAssitant() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50"
+                className="inline-flex items-center px-6 py-3 border  text-base font-medium  border-black rounded-md shadow-sm text-black bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50"
               >
                 {isLoading ? (
                   <span className="flex items-center">
@@ -468,11 +471,8 @@ export default function LegalResearchAssitant() {
         </div>
       </main>
       
-      <footer className="bg-gray-100 py-6 mt-12">
-        <div className="container mx-auto px-4 text-center text-gray-600 text-sm">
-          <p>© {new Date().getFullYear()} Legal Research Assistant. This tool is for educational and research purposes only.</p>
-        </div>
-      </footer>
+      
     </div>
+    </>
   );
 }

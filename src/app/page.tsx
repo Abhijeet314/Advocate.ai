@@ -1,12 +1,13 @@
 import React from 'react'
-import LegalResearchAssitant from './components/legalResearchAssitant'
-import LegalChatbot from './components/legalChatbot'
+
+import { Navbar } from '../sections/navbar/navbar'
+import ChatWidget from '../components/ChatWidget'
+import LegalChatbot from '../components/legalChatbot'
 
 function page() {
   return (
     <div>
-      <LegalResearchAssitant />
-      <LegalChatbot />
+      <Navbar/>
     </div>
   )
 }
