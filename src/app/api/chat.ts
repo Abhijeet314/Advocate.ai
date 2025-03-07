@@ -1,0 +1,32 @@
+import type { NextApiRequest, NextApiResponse } from 'next';
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  const { query, session_id } = req.body;
+
+  if (!query) {
+    return res.status(400).json({ error: 'No query provided' });
+  }
+
+  try {
+    const response = await fetch('http://localhost:5000/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ query, session_id }),
+    });
+
+    const data = await response.json();
+    return res.status(response.status).json(data);
+  } catch (error) {
+    console.error('Error forwarding to Flask backend:', error);
+    return res.status(500).json({ error: 'Failed to connect to AI service' });
+  }
+}
