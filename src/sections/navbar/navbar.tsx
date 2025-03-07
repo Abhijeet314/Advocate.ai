@@ -6,7 +6,7 @@ import Image from "next/image";
 
 export const Navbar = () => {
   return (
-    <div className="py-4 sticky top-0 z-50">
+    <div className="py-4 sticky top-0 z-50 backdrop-blur-sm">
       <div className="flex justify-between items-center mx-auto w-11/12 max-w-7xl">
         <Image src="/advocate.png" alt="logo" width={200} height={600} />
         <SlideTabs />
