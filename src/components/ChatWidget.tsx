@@ -1,6 +1,12 @@
 "use client"
 import React, { useState, useRef, useEffect } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+import ReactMarkdown from 'react-markdown';
+import type { Components } from 'react-markdown';
+
+// We'll generate IDs on the client side
+function generateId() {
+  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+}
 
 interface Message {
   role: 'user' | 'assistant';
@@ -9,38 +15,45 @@ interface Message {
 
 const ChatWidget: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([
+    { role: 'assistant', content: 'Hello, I am Advocate.ai, your Legal Assistant. How can I help with your legal questions today?' }
+  ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [sessionId, setSessionId] = useState('');
+  const [conversationId, setConversationId] = useState<string>('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const isInitialized = useRef(false);
 
+  // Initialize conversation ID safely on client side
   useEffect(() => {
-    const id = localStorage.getItem('advocate_session_id') || uuidv4();
-    setSessionId(id);
-    localStorage.setItem('advocate_session_id', id);
-    
-    fetchHistory(id);
+    if (!isInitialized.current) {
+      let savedId;
+      try {
+        savedId = localStorage.getItem('advocateAiConversationId');
+      } catch (e) {
+        console.warn('localStorage is not available:', e);
+      }
+      
+      setConversationId(savedId || generateId());
+      isInitialized.current = true;
+    }
   }, []);
+
+  // Save conversation ID to localStorage safely
+  useEffect(() => {
+    if (conversationId && typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('advocateAiConversationId', conversationId);
+      } catch (e) {
+        console.warn('Failed to save to localStorage:', e);
+      }
+    }
+  }, [conversationId]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
-
-  const fetchHistory = async (id: string) => {
-    try {
-      const response = await fetch(`/api/history?session_id=${id}`);
-      const data = await response.json();
-      if (data.messages && Array.isArray(data.messages)) {
-        setMessages(data.messages);
-      }
-    } catch (error) {
-      console.error('Failed to load chat history:', error);
-      setMessages([
-        { role: 'assistant', content: 'Hello I am your Legal Assistant Advocate.ai' }
-      ]);
-    }
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -52,17 +65,21 @@ const ChatWidget: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch('/api/chat', {
+      const response = await fetch('https://legalchatbot-wf3i.onrender.com/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           query: input,
-          session_id: sessionId
+          conversationId: conversationId || generateId()
         }),
       });
 
+      if (!response.ok) {
+        throw new Error(`Server returned ${response.status}`);
+      }
+      
       const data = await response.json();
       
       if (data.error) {
@@ -71,7 +88,10 @@ const ChatWidget: React.FC = () => {
           { role: 'assistant', content: 'Sorry, I encountered an error. Please try again.' }
         ]);
       } else {
-        setMessages(data.messages);
+        setMessages(prev => [
+          ...prev,
+          { role: 'assistant', content: data.response || 'No response received' }
+        ]);
       }
     } catch (error) {
       console.error('Error:', error);
@@ -85,31 +105,55 @@ const ChatWidget: React.FC = () => {
   };
 
   const clearChat = async () => {
+    // Clear chat UI
+    setMessages([
+      { role: 'assistant', content: 'Hello, I am Advocate.ai, your Legal Assistant. How can I help with your legal questions today?' }
+    ]);
+    
+    // Generate a new conversation ID
+    const newConversationId = generateId();
+    setConversationId(newConversationId);
+    
+    // Clear conversation history on the server
     try {
-      await fetch('/api/clear', {
+      await fetch('https://legalchatbot-wf3i.onrender.com/clear-history', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          session_id: sessionId
+          conversationId: conversationId
         }),
       });
-      
-      setMessages([
-        { role: 'assistant', content: 'Hello I am your Legal Assistant Advocate.ai' }
-      ]);
     } catch (error) {
-      console.error('Failed to clear chat:', error);
+      console.error('Failed to clear conversation history on server:', error);
     }
+  };
+
+  const toggleExpand = () => {
+    setIsExpanded(!isExpanded);
+  };
+
+  // Custom components for ReactMarkdown with proper TypeScript typing
+  const MarkdownComponents: Components = {
+    h1: ({children}) => <h1 className="text-xl font-bold mt-4 mb-2">{children}</h1>,
+    h2: ({children}) => <h2 className="text-lg font-bold mt-3 mb-2">{children}</h2>,
+    h3: ({children}) => <h3 className="text-base font-bold mt-2 mb-1">{children}</h3>,
+    p: ({children}) => <p className="mb-3">{children}</p>,
+    ul: ({children}) => <ul className="list-disc ml-6 mb-3">{children}</ul>,
+    ol: ({children}) => <ol className="list-decimal ml-6 mb-3">{children}</ol>,
+    li: ({children}) => <li className="mb-1">{children}</li>,
+    strong: ({children}) => <strong className="font-bold">{children}</strong>,
+    em: ({children}) => <em className="italic">{children}</em>,
+    code: ({children}) => <code className="font-mono bg-gray-100 px-1 rounded">{children}</code>,
+    a: ({href, children}) => <a href={href} className="text-blue-600 underline">{children}</a>,
   };
 
   return (
     <>
-    
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-4 right-4 w-14 h-14 bg-blue-600 text-white rounded-full shadow-lg flex items-center justify-center hover:bg-blue-700 transition-all z-50"
+        className="fixed bottom-4 right-4 w-14 h-14 bg-blue-700 text-white rounded-full shadow-lg flex items-center justify-center hover:bg-blue-800 transition-all z-50"
         aria-label="Chat with Advocate.ai"
       >
         {isOpen ? (
@@ -118,29 +162,44 @@ const ChatWidget: React.FC = () => {
           </svg>
         ) : (
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
           </svg>
         )}
       </button>
       <div 
-        className={`fixed bottom-20 right-4 w-full sm:w-96 bg-white rounded-lg shadow-xl overflow-hidden transition-all duration-300 ease-in-out z-40 flex flex-col ${
-          isOpen ? 'h-96 opacity-100' : 'h-0 opacity-0 pointer-events-none'
+        className={`fixed ${isExpanded ? 'top-25 bottom-25 right-4 left-4 sm:left-auto sm:w-2/3 md:w-1/2 lg:w-1/3' : 'bottom-20 right-4 w-full sm:w-96 h-96'} bg-white rounded-lg shadow-xl overflow-hidden transition-all duration-300 ease-in-out z-40 flex flex-col ${
+          isOpen ? 'opacity-100' : 'h-0 opacity-0 pointer-events-none'
         }`}
       >
-        <div className="bg-blue-600 text-white p-4 flex justify-between items-center">
+        <div className="bg-blue-700 text-white p-4 flex justify-between items-center">
           <div className="flex items-center">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
             </svg>
             <h3 className="font-medium">Advocate.ai</h3>
           </div>
           <div className="flex">
             <button 
+              onClick={toggleExpand}
+              className="mr-3 text-white hover:text-gray-200"
+              aria-label={isExpanded ? "Collapse chat" : "Expand chat"}
+            >
+              {isExpanded ? (
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5v-4m0 4h-4m4 0l-5-5" />
+                </svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5v-4m0 4h-4m4 0l-5-5" />
+                </svg>
+              )}
+            </button>
+            <button 
               onClick={clearChat}
               className="mr-3 text-sm hover:underline"
               aria-label="Clear chat"
             >
-              Clear
+              New Chat
             </button>
             <button 
               onClick={() => setIsOpen(false)}
@@ -163,11 +222,17 @@ const ChatWidget: React.FC = () => {
               <div 
                 className={`inline-block rounded-lg px-4 py-2 max-w-xs sm:max-w-sm break-words ${
                   message.role === 'user' 
-                    ? 'bg-blue-600 text-white' 
+                    ? 'bg-blue-700 text-white' 
                     : 'bg-white text-gray-800 border border-gray-200'
                 }`}
               >
-                {message.content}
+                {message.role === 'assistant' ? (
+                  <ReactMarkdown components={MarkdownComponents}>
+                    {message.content}
+                  </ReactMarkdown>
+                ) : (
+                  message.content
+                )}
               </div>
             </div>
           ))}
@@ -196,7 +261,7 @@ const ChatWidget: React.FC = () => {
             />
             <button
               type="submit"
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 rounded-r-lg flex items-center justify-center disabled:bg-blue-400"
+              className="bg-blue-700 hover:bg-blue-800 text-white px-4 rounded-r-lg flex items-center justify-center disabled:bg-blue-400"
               disabled={isLoading || !input.trim()}
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -205,7 +270,7 @@ const ChatWidget: React.FC = () => {
             </button>
           </div>
           <p className="text-xs text-gray-500 mt-2 text-center">
-            This is an AI assistant. For professional legal advice, please consult a qualified attorney.
+            This is an AI legal assistant. For professional legal advice, please consult a qualified attorney.
           </p>
         </form>
       </div>
