@@ -1,4 +1,5 @@
 // File: pages/index.tsx
+"use client"
 import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import Head from 'next/head';
@@ -27,7 +28,7 @@ export default function ChatWithLegalDoc() {
     // Clean up function - delete session when component unmounts
     return () => {
       if (sessionId) {
-        fetch(`/api/sessions/${sessionId}`, { method: 'DELETE' })
+        fetch(`https://chatwithlegal.onrender.com/api/sessions/${sessionId}`, { method: 'DELETE' })
           .catch(err => console.error('Error deleting session:', err));
       }
     };
@@ -42,7 +43,7 @@ export default function ChatWithLegalDoc() {
     formData.append('session_id', sessionId);
     
     try {
-      const response = await fetch('/api/upload', {
+      const response = await fetch('https://chatwithlegal.onrender.com/api/upload', {
         method: 'POST',
         body: formData,
       });
@@ -71,7 +72,7 @@ export default function ChatWithLegalDoc() {
     setError('');
     
     try {
-      const response = await fetch('/api/analyze', {
+      const response = await fetch('https://chatwithlegal.onrender.com/api/analyze', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -105,7 +106,7 @@ export default function ChatWithLegalDoc() {
     setError('');
     
     try {
-      const response = await fetch('/api/query', {
+      const response = await fetch('https://chatwithlegal.onrender.com/api/query', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
