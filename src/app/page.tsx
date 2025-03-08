@@ -8,10 +8,7 @@ import HeroSection from '@/sections/hero/hero'
 import HealthcareHero from '@/sections/hero/hero'
 import { Features } from '@/sections/features/features'
 import Footer from '@/sections/footer/footer'
-
-
-
-
+import LearningTrack from '@/components/LearningTrack'
 
 function page() {
   return (
