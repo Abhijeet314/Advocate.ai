@@ -22,7 +22,7 @@ const HealthcareHero: React.FC = () => {
           
           <h1 className="text-4xl md:text-7xl lg:text-8xl font-bold mb-6">
             <span className="text-black">Revolutionizing</span><br />
-            <span className="text-amber-400">Legal Sector</span>
+            <span className="text-blue-500">Legal Sector</span>
             <span className="text-black"> using AI</span>
           </h1>
 
@@ -52,10 +52,11 @@ const HealthcareHero: React.FC = () => {
             </div>
           </div> */}
         {/* </div> */}
-       
+        <Image src="/heropage.png" alt="chatbot" width={400} height={400} />
         <ChatWidget/>
 
       </main>
+      
     </div>
     </>
   );

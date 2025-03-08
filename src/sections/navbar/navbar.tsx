@@ -34,9 +34,9 @@ const SlideTabs = () => {
       className="relative flex rounded-full border-2 border-black bg-white p-1"
     >
       <a href="/"><Tab setPosition={setPosition}>Home</Tab></a>
-      <Tab setPosition={setPosition}>Pricing</Tab>
+      <a href="/" ><Tab setPosition={setPosition}>Pricing</Tab></a>
       <a href="/legalAssistant">
-        <Tab setPosition={setPosition}>Features</Tab>
+        <Tab setPosition={setPosition}>Assistant</Tab>
       </a>
       <Tab setPosition={setPosition}>Blogs</Tab>
       <Tab setPosition={setPosition}>Contact</Tab>

@@ -7,7 +7,8 @@ import ChatWidget from '../components/ChatWidget'
 import HeroSection from '@/sections/hero/hero'
 import HealthcareHero from '@/sections/hero/hero'
 import { Features } from '@/sections/features/features'
-import { Pricing } from '@/sections/pricing/pricing'
+import Footer from '@/sections/footer/footer'
+
 
 
 
@@ -21,7 +22,7 @@ function page() {
 
       <HealthcareHero/>
       <Features/>
-      <Pricing/>
+      <Footer/>
          </div>
 
   )

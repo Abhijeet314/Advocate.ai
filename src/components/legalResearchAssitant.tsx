@@ -286,12 +286,16 @@ export default function LegalResearchAssitant() {
                   <FaLightbulb className="text-green-600 mr-2" /> Strong Arguments for Your Case
                 </h3>
                 <div className="space-y-3">
-                  {analysisResult.strong_arguments.map((argument, index) => (
-                    <div key={index} className="pl-4 border-l-4 border-green-500">
-                      <p className="text-gray-700">{argument}</p>
-                    </div>
-                  ))}
-                </div>
+  {analysisResult?.strong_arguments?.length > 0 ? (
+    analysisResult.strong_arguments.map((argument, index) => (
+      <div key={index} className="pl-4 border-l-4 border-green-500">
+        <p className="text-gray-700">{argument}</p>
+      </div>
+    ))
+  ) : (
+    <p className="text-gray-500">No strong arguments found.</p>
+  )}
+</div>
               </div>
 
               {/* Tabs */}
