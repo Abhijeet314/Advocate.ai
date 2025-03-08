@@ -16,7 +16,7 @@ import Footer from '@/sections/footer/footer'
 function page() {
   return (
     <div>
-      <Navbar/>
+      
 
       <ChatWidget />
 

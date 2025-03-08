@@ -9,7 +9,7 @@ const space = Space_Grotesk({ subsets: ['latin'], weight: ['300'] })
 
 const Footer = () => {
 	return (
-		<footer style={{ backgroundImage: 'url("footer/footer_bg.svg")', backgroundRepeat: 'no-repeat' }}
+		<footer 
 			className='py-0 px-2 md:px-12 lg:px-24 bg-cover md:bg-contain mt-20 border border-black'>
 			
 			<div className="flex flex-wrap justify-center md:justify-end md:gap-24 lg:gap-48">

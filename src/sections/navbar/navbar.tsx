@@ -38,7 +38,9 @@ const SlideTabs = () => {
       <a href="/legalAssistant">
         <Tab setPosition={setPosition}>Assistant</Tab>
       </a>
-      <Tab setPosition={setPosition}>Blogs</Tab>
+      <a href="/legalDoc">
+        <Tab setPosition={setPosition}>Doc Generator</Tab>
+      </a>
       <Tab setPosition={setPosition}>Contact</Tab>
 
       <Cursor position={position} />

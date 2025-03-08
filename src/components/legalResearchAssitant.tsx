@@ -105,8 +105,6 @@ export default function LegalResearchAssitant() {
   
   return (
     <>
-    
-    <Navbar/>
     <div className="min-h-screen">
       <Head>
         <meta name="description" content="AI-powered legal insights for lawyers" />

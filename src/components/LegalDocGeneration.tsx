@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { Navbar } from '@/sections/navbar/navbar';
 
 // Define interface for document object
 interface Document {
@@ -24,7 +25,7 @@ export default function LegalDocGeneration() {
   const fetchDocuments = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:5000/documents');
+      const response = await fetch('https://legaldocgeneration.onrender.com/documents');
       const data = await response.json();
       setDocuments(data.documents || []);
       setLoading(false);
@@ -44,7 +45,7 @@ export default function LegalDocGeneration() {
     
     if (window.confirm('Are you sure you want to delete this document?')) {
       try {
-        await fetch(`http://localhost:5000/documents/${id}`, {
+        await fetch(`https://legaldocgeneration.onrender.com/documents/${id}`, {
           method: 'DELETE',
         });
         fetchDocuments();
@@ -55,6 +56,7 @@ export default function LegalDocGeneration() {
   };
 
   return (
+    <>
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white shadow">
         <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
@@ -128,5 +130,6 @@ export default function LegalDocGeneration() {
         </div>
       </main>
     </div>
+    </>
   );
 }

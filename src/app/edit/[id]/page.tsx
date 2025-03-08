@@ -41,7 +41,7 @@ export default function EditDocument() {
   const fetchDocument = async (): Promise<void> => {
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:5000/documents/${id}`);
+      const response = await fetch(`https://legaldocgeneration.onrender.com/documents/${id}`);
       const data: ApiResponse = await response.json();
       
       if (data.document) {
@@ -67,7 +67,7 @@ export default function EditDocument() {
         document_text: documentText,
       };
       
-      const response = await fetch(`http://localhost:5000/documents/${id}`, {
+      const response = await fetch(`https://legaldocgeneration.onrender.com/documents/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -97,7 +97,7 @@ export default function EditDocument() {
         regenerate: true,
       };
       
-      const response = await fetch(`http://localhost:5000/documents/${id}`, {
+      const response = await fetch(`https://legaldocgeneration.onrender.com/documents/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

@@ -40,7 +40,7 @@ export default function CreateDocument() {
     
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:5000/generate_questions', {
+      const response = await fetch('https://legaldocgeneration.onrender.com/generate_questions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -69,7 +69,7 @@ export default function CreateDocument() {
   const handleGenerateDocument = async (): Promise<void> => {
     try {
       setGeneratingDoc(true);
-      const response = await fetch('http://localhost:5000/generate_document', {
+      const response = await fetch('https://legaldocgeneration.onrender.com/generate_document', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
