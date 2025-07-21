@@ -10,13 +10,18 @@ import Sidebar from '../components/Sidebar';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { DocumentSummaryType, DocumentQueryResponse } from '../app/types/documentTypes';
 
+// Extended interface that includes query and all required DocumentQueryResponse properties
+interface ExtendedQueryResponse extends DocumentQueryResponse {
+  query: string;
+}
+
 export default function ChatWithLegalDoc() {
   const [sessionId, setSessionId] = useState<string>('');
   const [isFileUploaded, setIsFileUploaded] = useState<boolean>(false);
   const [filename, setFilename] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [documentSummary, setDocumentSummary] = useState<DocumentSummaryType | null>(null);
-  const [queryResponses, setQueryResponses] = useState<DocumentQueryResponse[]>([]);
+  const [queryResponses, setQueryResponses] = useState<ExtendedQueryResponse[]>([]);
   const [error, setError] = useState<string>('');
   const [activeTab, setActiveTab] = useState<'summary' | 'query'>('summary');
 
@@ -89,16 +94,16 @@ export default function ChatWithLegalDoc() {
       if (!response.ok) {
         throw new Error(data.error || 'Failed to analyze document');
       }
+      
+      // Set the document summary from the response
+      setDocumentSummary(data);
+      
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);
       } else {
         setError('An error occurred during document analysis');
       }
-    } finally {
-      setIsLoading(false);
-    } catch (err: any) {
-      setError(err.message || 'An error occurred during document analysis');
     } finally {
       setIsLoading(false);
     }
@@ -131,21 +136,25 @@ export default function ChatWithLegalDoc() {
         throw new Error(data.error || 'Failed to process query');
       }
       
-    // Add timestamp and query text to response for display purposes
-    const newResponse: DocumentQueryResponse = {
-
-      response: data.response,
-      timestamp: new Date().toISOString(),
-    };
-    setQueryResponses(prev => [...prev, newResponse]);
-    setActiveTab('query');
-    
-  } catch (err: any) {
-    setError(err.message || 'An error occurred while processing your query');
-  } finally {
-    setIsLoading(false);
-  }
-};
+      // Add timestamp and query text to response for display purposes
+      const newResponse: ExtendedQueryResponse = {
+        query: query,
+        response: data.response,
+        timestamp: new Date().toISOString(),
+      };
+      setQueryResponses(prev => [...prev, newResponse]);
+      setActiveTab('query');
+      
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An error occurred while processing your query');
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
