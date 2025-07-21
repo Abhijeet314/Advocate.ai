@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect, ChangeEvent } from 'react';
+import { useState, ChangeEvent } from 'react';
 import { useRouter } from 'next/navigation';
 
 // Define types for our data structures

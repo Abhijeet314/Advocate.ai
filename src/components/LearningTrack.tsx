@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import Head from 'next/head';
 import { LearningCategory } from '../app/types/types';
 import { generateLearningTrack } from '../app/api';
-import { saveLearningTrack, getUserId } from '../app/utils/storage';
+import { saveLearningTrack} from '../app/utils/storage';
 
 export default function LearningTrack() {
   const router = useRouter();

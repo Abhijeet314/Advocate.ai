@@ -19,26 +19,28 @@ const pricingTiers = [
   },
   {
     title: "Premius Features",
-    joiningPrice: 2 ,
+    joiningPrice: 20 ,
     buttonText: "Sign up now",
     popular: true,
     inverse: true,
     features: [
       "Chat Bot Access",
-      "Legal News",
-      "20 Free Legal Assistantance / Month",
+      "20 Document Generation",
+      "20 Document Editor and Ananlyser",
+      "30 Free Legal Assistantance",
       "Basic support",
     ],
   },
   {
     title: "VIP Features",
-    joiningPrice: 4,
+    joiningPrice: 40,
     buttonText: "Sign up now",
     popular: false,
     inverse: false,
     features: [
      "Chat Bot Access",
-      "Legal News",
+      "50 Document Generation",
+      "50 Document Editor and Ananlyser",
       "60 Free Legal Assistantance",
       "Basic support",
       
@@ -59,8 +61,8 @@ export const Pricing = () => {
         </div>
         <div className="flex flex-col ml-30 gap-7 items-center mt-16 lg:flex-row  lg:items-end lg:justify-center">
       
-          {pricingTiers.map(({title , joiningPrice, buttonText, popular, inverse, features}) => (
-            <div className={twMerge("card", inverse === true && 'border-black bg-black text-white/60')}>
+          {pricingTiers.map(({title , joiningPrice, buttonText, popular, inverse, features}, idx) => (
+            <div key={title + idx} className={twMerge("card", inverse === true && 'border-black bg-black text-white/60')}>
               <div className="flex justify-between">
             <h3 className={twMerge("text-lg font-bold text-black/50" ,inverse === true && 'text-white/60')}>{title}</h3>
             {popular ===true &&(
@@ -68,13 +70,13 @@ export const Pricing = () => {
           )}
           </div>
             <div className="flex items-baseline gap-1 mt-[30px]">
-              <span className="tetx-6xl font-bold tracking-tighter leading-none">{joiningPrice} SOL</span>
-              <span className="tracking-tight font-bold text-black/50">/room</span>
+              <span className="tetx-6xl font-bold tracking-tighter leading-none">{joiningPrice} $</span>
+              <span className="tracking-tight font-bold text-black/50">/Month</span>
             </div>
             <button className={twMerge("btn btn-primary w-full mt-[30px]", inverse === true && 'bg-white text-black')}>{buttonText}</button>
             <ul className="flex flex-col gap-2 mt-8">
-              {features.map((feature) => (
-                <li className="text-sm flex items-center gap-4">
+              {features.map((feature, featureIdx) => (
+                <li key={featureIdx} className="text-sm flex items-center gap-4">
                   <Image src="/check.svg" alt="check" width={20} height={20} />
                   <span>{feature}</span></li>
               ))}

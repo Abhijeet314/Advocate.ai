@@ -1,7 +1,7 @@
 // File: pages/quiz/[trackId]/[moduleIndex].tsx - Quiz page
 "use client"
 import React, { useState, useEffect } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import Head from 'next/head';
 import Link from 'next/link';
 import { 
@@ -14,7 +14,6 @@ import { getQuizQuestions, awardTokens } from '../../../api';
 import { LearningTrack, Module, QuizQuestion, UserProgress } from '../../../../app/types/types';
 
 export default function Quiz() {
-  const router = useRouter();
   const params = useParams();
   const trackId = params?.trackId;
   const moduleIndex = params?.moduleIndex;

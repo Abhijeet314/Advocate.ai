@@ -4,10 +4,8 @@ import React from "react";
 import { BentoGrid, BentoGridItem } from "../../components/ui/bento-grid";
 import {
   IconBoxAlignRightFilled,
-  IconClipboardCopy,
   IconFileBroken,
   IconSignature,
-  IconTableColumn,
 } from "@tabler/icons-react";
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -38,30 +36,6 @@ export function Features() {
 }
 
 const SkeletonOne = () => {
-  const variants = {
-    initial: {
-      x: 0,
-    },
-    animate: {
-      x: 10,
-      rotate: 5,
-      transition: {
-        duration: 0.2,
-      },
-    },
-  };
-  const variantsSecond = {
-    initial: {
-      x: 0,
-    },
-    animate: {
-      x: -10,
-      rotate: -5,
-      transition: {
-        duration: 0.2,
-      },
-    },
-  };
 
   return (
     <>
@@ -174,31 +148,6 @@ const SkeletonFour = () => {
   );
 };
 const SkeletonFive = () => {
-  const variants = {
-    initial: {
-      x: 0,
-    },
-    animate: {
-      x: 10,
-      rotate: 5,
-      transition: {
-        duration: 0.2,
-      },
-    },
-  };
-  const variantsSecond = {
-    initial: {
-      x: 0,
-    },
-    animate: {
-      x: -10,
-      rotate: -5,
-      transition: {
-        duration: 0.2,
-      },
-    },
-  };
-
   return (
     <div>
         <Image

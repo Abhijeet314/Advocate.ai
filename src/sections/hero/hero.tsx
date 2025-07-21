@@ -1,13 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import ChatWidget from '@/components/ChatWidget';
 
 const HealthcareHero: React.FC = () => {
-  const [location, setLocation] = useState('');
-  const [date, setDate] = useState('');
 
   return (
     <>
@@ -15,9 +13,9 @@ const HealthcareHero: React.FC = () => {
       {/* Main Hero Content */}
       <main className="relative z-20 px-6 pt-20 pb-24 max-w-7xl mx-auto flex flex-row-2">
         <div className="flex flex-col items-start  mb-16">
-            <button className="inline-block px-6 py-2 rounded-full border border-gray-500 text-black mb-8 cursor-pointer">
+            <Link href="/sign-up"><button className="inline-block px-6 py-2 rounded-full border border-gray-500 text-black mb-8 cursor-pointer">
             New Feature&apos;s Are Live →
-            </button>
+            </button></Link>
           
           
           <h1 className="text-4xl md:text-7xl lg:text-8xl font-bold mb-6">

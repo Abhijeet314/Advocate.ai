@@ -3,10 +3,11 @@ import React, { Dispatch, SetStateAction, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton, useUser } from "@clerk/nextjs";
 import Image from "next/image";
+import Link from "next/link";
 
 export const Navbar = () => {
   return (
-    <div className="py-4 sticky top-0 z-50 backdrop-blur-sm">
+    <div className="py-2 sticky top-0 z-50 backdrop-blur-sm">
       <div className="flex justify-between items-center mx-auto w-11/12 max-w-7xl">
         <Image src="/advocate.png" alt="logo" width={200} height={600} />
         <SlideTabs />
@@ -33,17 +34,22 @@ const SlideTabs = () => {
       }}
       className="relative flex rounded-full border-2 border-black bg-white p-1"
     >
-      <a href="/"><Tab setPosition={setPosition}>Home</Tab></a>
-      <a href="/" ><Tab setPosition={setPosition}>Pricing</Tab></a>
-      <a href="/legalAssistant">
+      <Link href="/" legacyBehavior>
+        <a>
+          <Tab setPosition={setPosition}>Home</Tab>
+        </a>
+      </Link>
+      
+      <Link href="/legalAssistant">
         <Tab setPosition={setPosition}>Assistant</Tab>
-      </a>
-      <a href="/legalDoc">
+      </Link>
+      <Link href="/legalDoc">
         <Tab setPosition={setPosition}>Doc Generator</Tab>
-      </a>
-      <a href="/chatLegalDoc">
+      </Link>
+      <Link href="/chatLegalDoc">
         <Tab setPosition={setPosition}>Legal Doc</Tab>
-      </a>
+      </Link>
+      <Link href="/learningTrack" ><Tab setPosition={setPosition}>Learn</Tab></Link>
 
       <Cursor position={position} />
     </ul>

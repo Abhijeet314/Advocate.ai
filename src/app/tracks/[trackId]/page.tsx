@@ -1,6 +1,6 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-  import { useRouter, useParams } from 'next/navigation';
+  import {useParams } from 'next/navigation';
   
   import Head from 'next/head';
   import Link from 'next/link';
@@ -11,10 +11,9 @@ import React, { useState, useEffect } from 'react';
     saveUserProgress 
   } from '../../utils/storage';
   import { trackProgress } from '../../api';
-  import { LearningTrack, Module, UserProgress } from '../../../app/types/types';
+  import { LearningTrack, UserProgress } from '../../../app/types/types';
   
   export default function TrackDetail() {
-    const router = useRouter();
     const params = useParams();
     const trackId = params?.trackId;
     

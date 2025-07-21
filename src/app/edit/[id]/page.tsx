@@ -32,12 +32,6 @@ export default function EditDocument() {
   const [editMode, setEditMode] = useState<'direct' | 'answers'>('direct'); 
   const [regenerating, setRegenerating] = useState<boolean>(false);
   
-  useEffect(() => {
-    if (id) {
-      fetchDocument();
-    }
-  }, [id]);
-  
   const fetchDocument = async (): Promise<void> => {
     try {
       setLoading(true);
@@ -57,6 +51,12 @@ export default function EditDocument() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (id) {
+      fetchDocument();
+    }
+  }, [fetchDocument, id]);
   
   const handleSave = async (): Promise<void> => {
     try {
@@ -157,7 +157,7 @@ export default function EditDocument() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
           <h2 className="mt-2 text-lg font-medium text-gray-900">Document not found</h2>
-          <p className="mt-1 text-gray-500">The document you're looking for doesn't exist or has been deleted.</p>
+          <p className="mt-1 text-gray-500">The document you are looking for does not exist or has been deleted.</p>
           <button
             onClick={() => router.push('/')}
             className="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"

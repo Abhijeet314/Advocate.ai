@@ -11,7 +11,6 @@ import {
   FaBalanceScale, 
   FaExclamationTriangle 
 } from 'react-icons/fa';
-import { Navbar } from '@/sections/navbar/navbar';
 
 const API_URL = 'https://legalresearchassitance.onrender.com';
 
@@ -173,7 +172,7 @@ export default function LegalResearchAssitant() {
                 
                 <div>
                   <label htmlFor="oppositionDemand" className="block text-sm font-medium text-gray-700 mb-1">
-                    Opposition's Demand/Claim
+                    Oppositions Demand/Claim
                   </label>
                   <input
                     id="oppositionDemand"
@@ -246,7 +245,7 @@ export default function LegalResearchAssitant() {
               <strong>Case Type:</strong> {caseType}
             </p>
             <p className="text-sm text-blue-700 mb-1">
-              <strong>Opposition's Demand:</strong> {oppositionDemand}
+              <strong>Oppositions Demand:</strong> {oppositionDemand}
             </p>
             <p className="text-sm text-blue-700">
               <strong>Additional Details:</strong> {additionalDetails}
@@ -464,7 +463,7 @@ export default function LegalResearchAssitant() {
               
               <h3 className="text-lg font-medium text-gray-900 mb-2">Limitations</h3>
               <ul className="list-disc pl-5 space-y-1">
-                <li className="text-gray-700">The tool relies on AI's knowledge cutoff date and may not include the very latest legal developments</li>
+                <li className="text-gray-700">The tool relies on AI knowledge cutoff date and may not include the very latest legal developments</li>
                 <li className="text-gray-700">All suggestions should be verified against current legal sources</li>
                 <li className="text-gray-700">The analysis is meant to supplement, not replace, professional legal expertise</li>
               </ul>

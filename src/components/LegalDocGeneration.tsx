@@ -2,8 +2,6 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Navbar } from '@/sections/navbar/navbar';
-
 // Define interface for document object
 interface Document {
   id: string;

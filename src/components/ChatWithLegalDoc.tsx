@@ -32,7 +32,7 @@ export default function ChatWithLegalDoc() {
           .catch(err => console.error('Error deleting session:', err));
       }
     };
-  }, []);
+  }, [sessionId]);
 
   const handleFileUpload = async (file: File) => {
     setIsLoading(true);
@@ -60,8 +60,12 @@ export default function ChatWithLegalDoc() {
       // Automatically analyze the document after upload
       await analyzeDocument();
       
-    } catch (err: any) {
-      setError(err.message || 'An error occurred during file upload');
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An error occurred during file upload');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -85,10 +89,14 @@ export default function ChatWithLegalDoc() {
       if (!response.ok) {
         throw new Error(data.error || 'Failed to analyze document');
       }
-      
-      setDocumentSummary(data.summary);
-      setActiveTab('summary');
-      
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An error occurred during document analysis');
+      }
+    } finally {
+      setIsLoading(false);
     } catch (err: any) {
       setError(err.message || 'An error occurred during document analysis');
     } finally {
@@ -123,23 +131,21 @@ export default function ChatWithLegalDoc() {
         throw new Error(data.error || 'Failed to process query');
       }
       
-      // Add timestamp and query text to response for display purposes
-      const newResponse = {
-        ...data.response,
-        timestamp: new Date().toISOString(),
-        queryText: query,
-        id: uuidv4()
-      };
-      
-      setQueryResponses(prev => [newResponse, ...prev]);
-      setActiveTab('query');
-      
-    } catch (err: any) {
-      setError(err.message || 'An error occurred while processing your query');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    // Add timestamp and query text to response for display purposes
+    const newResponse: DocumentQueryResponse = {
+
+      response: data.response,
+      timestamp: new Date().toISOString(),
+    };
+    setQueryResponses(prev => [...prev, newResponse]);
+    setActiveTab('query');
+    
+  } catch (err: any) {
+    setError(err.message || 'An error occurred while processing your query');
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen bg-gray-50">
